@@ -5,6 +5,52 @@ if (( EUID != 0)); then
     exit 100
 fi
 
+
+#
+# This install script is based of the Calamares installer of CachyOS
+# Source: https://github.com/CachyOS/cachyos-calamares/blob/cachyos-systemd-qt6/src/modules/
+#
+
+#
+## shellprocess@modify_mk_hook
+#
+# disables running mkinitcpio while install process, it will be called once with initcpio module
+# enable_mk_hook needs to be run at the ende of install process in settings.conf to "reanable" 90-mkinitcpio-install.hook for installed system
+# pacstrap needs the hook to be present on "host" but the script needs to be present inside chroot so we copy modified hook to host and script to chroot.
+# for pacman installing DE/WM and common packages inside chroot it needs hook present in chroot so we copy that also inside.
+mkdir -p /etc/pacman.d/hooks/
+cp /etc/calamares/scripts/90-mkinitcpio-install.hook /etc/pacman.d/hooks/
+
+mkdir -p /mnt/usr/share/libalpm/scripts/
+cp /etc/calamares/scripts/mkinitcpio-install-calamares /mnt/usr/share/libalpm/scripts/
+chmod +x /mnt/usr/share/libalpm/scripts/mkinitcpio-install-calamares
+
+mkdir -p /mnt/etc/pacman.d/hooks/
+cp /etc/calamares/scripts/90-mkinitcpio-install.hook /mnt/etc/pacman.d/hooks/
+
+#
+## shellprocess@initialize_pacman
+#
+# generate pacman keyring, mirrorlist and copy them into target system
+bash /etc/calamares/scripts/update-mirrorlist
+pacman -Sy --noconfirm archlinux-keyring cachyos-keyring
+chmod +x /etc/calamares/scripts/create-pacman-keyring
+
+mkdir -p /mnt/etc/pacman.d/
+cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/
+cp /etc/pacman.d/cachyos-mirrorlist /mnt/etc/pacman.d/
+cp /etc/pacman.d/cachyos-v3-mirrorlist /mnt/etc/pacman.d/
+cp /etc/pacman.d/cachyos-v4-mirrorlist /mnt/etc/pacman.d/
+cp -a /etc/pacman.d/gnupg /mnt/etc/pacman.d/
+cp /etc/resolv.conf /mnt/etc/
+
+
+#
+## pacstrap
+#
+# This module installs the base system and then copies files
+# into the installation that will be used in the installed system
+#
 pacstrap -K /mnt \
     cachyos-hooks \
     cachyos-keyring \
@@ -18,36 +64,34 @@ pacstrap -K /mnt \
     linux-firmware
 
 
-# shellprocess@modify_mk_hook
-# disables running mkinitcpio while install process, it will be called once with initcpio module
-# enable_mk_hook needs to be run at the ende of install process in settings.conf to "reanable" 90-mkinitcpio-install.hook for installed system
-# pacstrap needs the hook to be present on "host" but the script needs to be present inside chroot so we copy modified hook to host and script to chroot.
-# for pacman installing DE/WM and common packages inside chroot it needs hook present in chroot so we copy that also inside.
 #
-mkdir -p /etc/pacman.d/hooks/
-cp /etc/calamares/scripts/90-mkinitcpio-install.hook /etc/pacman.d/hooks/
-
-mkdir -p /mnt/usr/share/libalpm/scripts/
-cp /etc/calamares/scripts/mkinitcpio-install-calamares /mnt/usr/share/libalpm/scripts/
-chmod +x /mnt/usr/share/libalpm/scripts/mkinitcpio-install-calamares
-
-mkdir -p /mnt/etc/pacman.d/hooks/
-cp /etc/calamares/scripts/90-mkinitcpio-install.hook /mnt/etc/pacman.d/hooks/
-
-
-# shellprocess@initialize_pacman
-# generate pacman keyring, mirrorlist and copy them into target system
+# postInstallFiles is an array of file names which will be copied into the system
 #
-bash /etc/calamares/scripts/update-mirrorlist
-pacman -Sy --noconfirm archlinux-keyring cachyos-keyring
-chmod +x /etc/calamares/scripts/create-pacman-keyring
+# The paths should be relative to the host and the files will be copied to the
+# location in the installed system
+#
+## postInstallFiles:
+cp /etc/pacman.conf /mnt/etc/pacman.conf
+cp /etc/pacman-more.conf /mnt/etc/pacman-more.conf
+cp /etc/mkinitcpio.conf /mnt/etc/mkinitcpio.conf
+cp /usr/local/bin/dmcheck /mnt/usr/local/bin/dmcheck
+cp /usr/local/bin/remove-nvidia /mnt/usr/local/bin/remove-nvidia
+cp /etc/calamares/scripts/try-v3 /mnt/etc/calamares/scripts/try-v3
+cp /etc/calamares/scripts/remove-ucode /mnt/etc/calamares/scripts/remove-ucode
+cp /etc/calamares/scripts/enable-ufw /mnt/etc/calamares/scripts/enable-ufw
 
-mkdir -p /mnt/etc/pacman.d/
-cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/
-cp /etc/pacman.d/cachyos-mirrorlist /mnt/etc/pacman.d/
-cp /etc/pacman.d/cachyos-v3-mirrorlist /mnt/etc/pacman.d/
-cp /etc/pacman.d/cachyos-v4-mirrorlist /mnt/etc/pacman.d/
-cp -a /etc/pacman.d/gnupg /mnt/etc/pacman.d/
-cp /etc/resolv.conf /mnt/etc/
+#
+## locale
+#
+
+if grep -q "^en_US.UTF-8 UTF-8" /etc/locale.gen; then
+    echo "en_US.UTF-8 UTF-8" | tee --append /etc/locale.gen
+fi
+
+if grep -q "^ja_JP.UTF-8 UTF-8" /etc/locale.gen; then
+    echo "ja_JP.UTF-8 UTF-8" | tee --append /etc/locale.gen
+fi
+
+
 
 #makepkg -si ./PKGBUILD
