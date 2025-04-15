@@ -1,7 +1,7 @@
 # Maintainer: 0x42697262
 
 pkgname=chicken-settings
-pkgver=0.0.5
+pkgver=1.0.0
 pkgrel=1
 pkgdesc="0x42697262's system configuration, packages, and probably even home config"
 url=""
@@ -84,6 +84,7 @@ depends=(
     mesa-utils
     mlocate
     mtools
+    netcat
     netctl
     nfs-utils
     nilfs-utils
