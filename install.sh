@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Defining colours
+BRed="\e[1;31m"
+BGreen="\e[1;32m"
+BYellow="\e[1;33m"
+BBlue="\e[1;34m"
+End_Colour="\e[0m"
+
 if (( EUID != 0)); then
     echo "You must be root to install CachyOS." 1>&2
     exit 100
@@ -18,13 +25,16 @@ fi
 # enable_mk_hook needs to be run at the ende of install process in settings.conf to "reanable" 90-mkinitcpio-install.hook for installed system
 # pacstrap needs the hook to be present on "host" but the script needs to be present inside chroot so we copy modified hook to host and script to chroot.
 # for pacman installing DE/WM and common packages inside chroot it needs hook present in chroot so we copy that also inside.
+echo -e "${BBlue}[ * ]Running shellprocess@modify_mk_hook${End_Colour}"
 mkdir -p /etc/pacman.d/hooks/
 cp /etc/calamares/scripts/90-mkinitcpio-install.hook /etc/pacman.d/hooks/
 
+echo -e "${BYellow}[ * ]Copying mkinitcpio-install-calamares${End_Colour}"
 mkdir -p /mnt/usr/share/libalpm/scripts/
 cp /etc/calamares/scripts/mkinitcpio-install-calamares /mnt/usr/share/libalpm/scripts/
 chmod +x /mnt/usr/share/libalpm/scripts/mkinitcpio-install-calamares
 
+echo -e "${BYellow}[ * ]Copying mkinitcpio-install-calamares${End_Colour}"
 mkdir -p /mnt/etc/pacman.d/hooks/
 cp /etc/calamares/scripts/90-mkinitcpio-install.hook /mnt/etc/pacman.d/hooks/
 
@@ -32,10 +42,13 @@ cp /etc/calamares/scripts/90-mkinitcpio-install.hook /mnt/etc/pacman.d/hooks/
 ## shellprocess@initialize_pacman
 #
 # generate pacman keyring, mirrorlist and copy them into target system
+echo -e "${BBlue}[ * ]Running shellprocess@modify_mk_hook${End_Colour}"
+echo -e "${BYellow}[ * ]Updating mirrorlist${End_Colour}"
 bash /etc/calamares/scripts/update-mirrorlist
 pacman -Sy --noconfirm archlinux-keyring cachyos-keyring
 chmod +x /etc/calamares/scripts/create-pacman-keyring
 
+echo -e "${BYellow}[ * ]Copying mirrorlist${End_Colour}"
 mkdir -p /mnt/etc/pacman.d/
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/
 cp /etc/pacman.d/cachyos-mirrorlist /mnt/etc/pacman.d/
@@ -51,6 +64,7 @@ cp /etc/resolv.conf /mnt/etc/
 # This module installs the base system and then copies files
 # into the installation that will be used in the installed system
 #
+echo -e "${BBlue}[ * ]Running pacstrap${End_Colour}"
 pacstrap -K /mnt \
     cachyos-hooks \
     cachyos-keyring \
@@ -73,11 +87,13 @@ pacstrap -K /mnt \
 # location in the installed system
 #
 ## postInstallFiles:
+echo -e "${BYellow}[ * ]Copying Post Install Files${End_Colour}"
 cp /etc/pacman.conf /mnt/etc/pacman.conf
 cp /etc/pacman-more.conf /mnt/etc/pacman-more.conf
 cp /etc/mkinitcpio.conf /mnt/etc/mkinitcpio.conf
 cp /usr/local/bin/dmcheck /mnt/usr/local/bin/dmcheck
 cp /usr/local/bin/remove-nvidia /mnt/usr/local/bin/remove-nvidia
+mkdir -p /mnt/etc/calamares/scripts/
 cp /etc/calamares/scripts/try-v3 /mnt/etc/calamares/scripts/try-v3
 cp /etc/calamares/scripts/remove-ucode /mnt/etc/calamares/scripts/remove-ucode
 cp /etc/calamares/scripts/enable-ufw /mnt/etc/calamares/scripts/enable-ufw
@@ -87,13 +103,20 @@ cp /etc/calamares/scripts/enable-ufw /mnt/etc/calamares/scripts/enable-ufw
 ## locale
 #
 
-if grep -q "^en_US.UTF-8 UTF-8" /mnt/etc/locale.gen; then
-    echo "en_US.UTF-8 UTF-8" | tee --append /mnt/etc/locale.gen
+echo -e "${BBlue}[ * ]Running locale${End_Colour}"
+echo -e "${BYellow}[ * ]Adding en_US to locale${End_Colour}"
+if arch-chroot /mnt grep -q "^en_US.UTF-8 UTF-8" /etc/locale.gen; then
+    arch-chroot /mnt bash -c 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
 fi
+echo -e "${BYellow}[ * ]Adding ja_JP to locale${End_Colour}"
 if grep -q "^ja_JP.UTF-8 UTF-8" /etc/locale.gen; then
-    echo "ja_JP.UTF-8 UTF-8" | tee --append /mnt/etc/locale.gen
+    arch-chroot /mnt bash -c 'echo "ja_JP.UTF-8 UTF-8" >> /mnt/etc/locale.gen'
 fi
-cat <<EOF | tee /mnt/etc/locale.conf > /dev/null
+echo -e "${BYellow}[ * ]Generating locale${End_Colour}"
+arch-chroot /mnt locale-gen
+
+echo -e "${BYellow}[ * ]Creating locale.conf${End_Colour}"
+arch-chroot /mnt cat <<EOF | tee /mnt/etc/locale.conf > /dev/null
 LANG=en_US.UTF-8
 LC_ADDRESS=ja_JP.UTF-8
 LC_CTYPE=en_US.UTF-8
@@ -113,19 +136,21 @@ EOF
 #
 ## fstab
 #
-genfstab -U /mnt | tee /mnt/etc/fstab
+echo -e "${BBlue}[ * ]Generating /etc/fstab${End_Colour}"
+genfstab -U /mnt | arch-chroot /mnt tee /etc/fstab
 
 
 #
 ## shellprocess@before-online
 #
-#/etc/calamares/scripts/try-v3
-#rm /etc/calamares/scripts/try-v3
+arch-chroot /mnt /etc/calamares/scripts/try-v3
+arch-chroot /mnt rm /etc/calamares/scripts/try-v3
 
 #
 ## initcpiocfg
 #
-#source /etc/mkinitcpio.conf
-#mkinitcpio -p linux-cachyos
+echo -e "${BBlue}[ * ]Running mkinitcpio${End_Colour}"
+arch-chroot /mnt source /etc/mkinitcpio.conf
+arch-chroot /mnt mkinitcpio -p linux-cachyos
 
 #makepkg -si ./PKGBUILD
