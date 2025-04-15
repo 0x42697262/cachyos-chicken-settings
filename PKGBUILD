@@ -1,7 +1,7 @@
 # Maintainer: 0x42697262
 
 pkgname=chicken-settings
-pkgver=1.0.2
+pkgver=1.0.3
 pkgrel=0
 pkgdesc="0x42697262's system configuration, packages, and probably even home config"
 url=""
@@ -89,6 +89,7 @@ depends=(
     netctl
     nfs-utils
     nilfs-utils
+    nmap
     noto-color-emoji-fontconfig
     noto-fonts
     noto-fonts-cjk
