@@ -1,7 +1,7 @@
 # Maintainer: 0x42697262
 
 pkgname=chicken-settings
-pkgver=1.0.0
+pkgver=1.0.1
 pkgrel=1
 pkgdesc="0x42697262's system configuration, packages, and probably even home config"
 url=""
@@ -99,7 +99,6 @@ depends=(
     openssh
     pacman-contrib
     pamixer
-    paru
     pavucontrol
     pipewire-alsa
     pipewire-pulse

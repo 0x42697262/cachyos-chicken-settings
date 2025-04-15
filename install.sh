@@ -85,6 +85,7 @@ pacstrap -K /mnt \
     lvm2 \
     mkinitcpio \
     networkmanager \
+    paru \
     plymouth \
     sudo \
     systemd-boot-manager \
@@ -158,17 +159,6 @@ genfstab -U /mnt | arch-chroot /mnt tee /etc/fstab
 echo -e "${BYellow}[ * ]Checking for V3 support${End_Colour}"
 arch-chroot /mnt /etc/calamares/scripts/try-v3
 arch-chroot /mnt rm /etc/calamares/scripts/try-v3
-
-
-#
-## install custom packages
-#
-mkdir -p /mnt/tmp/chicken-settings/
-cp ./PKGBUILD /mnt/tmp/chicken-settings/PKGBUILD
-echo -e "${BYellow}[ * ](arch-chroot) Syncing pacman packages${End_Colour}"
-arch-chroot /mnt pacman -Sy
-echo -e "${BYellow}[ * ]Installing chicken-settings packages${End_Colour}"
-arch-chroot /mnt bash -c "cd /tmp/chicken-settings/ && makepkg -si"
 
 
 #
