@@ -82,22 +82,18 @@ cp /etc/calamares/scripts/try-v3 /mnt/etc/calamares/scripts/try-v3
 cp /etc/calamares/scripts/remove-ucode /mnt/etc/calamares/scripts/remove-ucode
 cp /etc/calamares/scripts/enable-ufw /mnt/etc/calamares/scripts/enable-ufw
 
-#
-## arch-chroot
-#
-arch-chroot /mnt
 
 #
 ## locale
 #
 
-if grep -q "^en_US.UTF-8 UTF-8" /etc/locale.gen; then
-    echo "en_US.UTF-8 UTF-8" | tee --append /etc/locale.gen
+if grep -q "^en_US.UTF-8 UTF-8" /mnt/etc/locale.gen; then
+    echo "en_US.UTF-8 UTF-8" | tee --append /mnt/etc/locale.gen
 fi
 if grep -q "^ja_JP.UTF-8 UTF-8" /etc/locale.gen; then
-    echo "ja_JP.UTF-8 UTF-8" | tee --append /etc/locale.gen
+    echo "ja_JP.UTF-8 UTF-8" | tee --append /mnt/etc/locale.gen
 fi
-cat <<EOF | tee /etc/locale.conf > /dev/null
+cat <<EOF | tee /mnt/etc/locale.conf > /dev/null
 LANG=en_US.UTF-8
 LC_ADDRESS=ja_JP.UTF-8
 LC_CTYPE=en_US.UTF-8
@@ -115,19 +111,21 @@ EOF
 
 
 #
-## shellprocess@before-online
-#
-/etc/calamares/scripts/try-v3
-rm /etc/calamares/scripts/try-v3
-
-
-#
 ## fstab
 #
-genfstab -U /mnt | tee /etc/fstab
+genfstab -U /mnt | tee /mnt/etc/fstab
+
 
 #
-## 
+## shellprocess@before-online
 #
+#/etc/calamares/scripts/try-v3
+#rm /etc/calamares/scripts/try-v3
+
+#
+## initcpiocfg
+#
+#source /etc/mkinitcpio.conf
+#mkinitcpio -p linux-cachyos
 
 #makepkg -si ./PKGBUILD
