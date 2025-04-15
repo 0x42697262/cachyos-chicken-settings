@@ -25,7 +25,7 @@ fi
 # enable_mk_hook needs to be run at the ende of install process in settings.conf to "reanable" 90-mkinitcpio-install.hook for installed system
 # pacstrap needs the hook to be present on "host" but the script needs to be present inside chroot so we copy modified hook to host and script to chroot.
 # for pacman installing DE/WM and common packages inside chroot it needs hook present in chroot so we copy that also inside.
-echo -e "${BBlue}[ * ]Running shellprocess@modify_mk_hook${End_Colour}"
+echo -e "${BYellow}[ * ]Running shellprocess@modify_mk_hook${End_Colour}"
 mkdir -p /etc/pacman.d/hooks/
 cp /etc/calamares/scripts/90-mkinitcpio-install.hook /etc/pacman.d/hooks/
 
@@ -42,7 +42,7 @@ cp /etc/calamares/scripts/90-mkinitcpio-install.hook /mnt/etc/pacman.d/hooks/
 ## shellprocess@initialize_pacman
 #
 # generate pacman keyring, mirrorlist and copy them into target system
-echo -e "${BBlue}[ * ]Running shellprocess@initialize_pacman${End_Colour}"
+echo -e "${BYellow}[ * ]Running shellprocess@initialize_pacman${End_Colour}"
 echo -e "${BYellow}[ * ]Updating mirrorlist${End_Colour}"
 bash /etc/calamares/scripts/update-mirrorlist
 pacman -Sy --noconfirm archlinux-keyring cachyos-keyring
@@ -64,8 +64,10 @@ cp /etc/resolv.conf /mnt/etc/
 # This module installs the base system and then copies files
 # into the installation that will be used in the installed system
 #
-echo -e "${BBlue}[ * ]Running pacstrap${End_Colour}"
+echo -e "${BYellow}[ * ]Running pacstrap${End_Colour}"
 pacstrap -K /mnt \
+    base \
+    base-devel \
     cachyos-hooks \
     cachyos-keyring \
     cachyos-mirrorlist \
@@ -73,12 +75,18 @@ pacstrap -K /mnt \
     cachyos-v3-mirrorlist \
     cachyos-rate-mirrors \
     cachyos-settings \
+    cachyos-fish-config \
     plymouth \
     cachyos-plymouth-theme \
     linux-cachyos \
     linux-cachyos-headers \
-    linux-firmware
-
+    linux-firmware \
+    cryptsetup \
+    lvm2 \
+    mkinitcpio \
+    sudo \
+    usbutils \
+    systemd-boot-manager
 
 #
 # postInstallFiles is an array of file names which will be copied into the system
@@ -103,7 +111,7 @@ cp /etc/calamares/scripts/enable-ufw /mnt/etc/calamares/scripts/enable-ufw
 ## locale
 #
 
-echo -e "${BBlue}[ * ]Running locale${End_Colour}"
+echo -e "${BYellow}[ * ]Running locale${End_Colour}"
 echo -e "${BYellow}[ * ]Adding en_US to locale${End_Colour}"
 if ! arch-chroot /mnt grep -q "^en_US.UTF-8 UTF-8" /etc/locale.gen; then
     arch-chroot /mnt bash -c 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
@@ -136,21 +144,35 @@ EOF
 #
 ## fstab
 #
-echo -e "${BBlue}[ * ]Generating /etc/fstab${End_Colour}"
+echo -e "${BYellow}[ * ]Generating /etc/fstab${End_Colour}"
 genfstab -U /mnt | arch-chroot /mnt tee /etc/fstab
 
 
 #
 ## shellprocess@before-online
 #
+echo -e "${BYellow}[ * ]Checking for V3 support${End_Colour}"
 arch-chroot /mnt /etc/calamares/scripts/try-v3
 arch-chroot /mnt rm /etc/calamares/scripts/try-v3
 
 #
 ## initcpiocfg
 #
-echo -e "${BBlue}[ * ]Running mkinitcpio${End_Colour}"
-arch-chroot /mnt source /etc/mkinitcpio.conf
-arch-chroot /mnt mkinitcpio -p linux-cachyos
+echo -e "${BYellow}[ * ]Running mkinitcpio${End_Colour}"
+arch-chroot /mnt bash -c "source /etc/mkinitcpio.conf && mkinitcpio -p linux-cachyos"
+
+#
+## users
+#
+echo -e "${BYellow}[ * ]Adding user birb${End_Colour}"
+arch-chroot /mnt useradd -m -G wheel -s /bin/fish birb
+arch-chroot /mnt usermod -aG birb,sys,network,rfkill,users,video,storage,lp,audio birb
+
+#
+## shellprocess@removeucode
+#
+echo -e "${BYellow}[ * ]Removing unused microcode${End_Colour}"
+arch-chroot /mnt /etc/calamares/scripts/remove-ucode
+arch-chroot /mnt rm /etc/calamares/scripts/remove-ucode
 
 #makepkg -si ./PKGBUILD
