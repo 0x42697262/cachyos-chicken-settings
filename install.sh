@@ -34,7 +34,7 @@ mkdir -p /mnt/usr/share/libalpm/scripts/
 cp /etc/calamares/scripts/mkinitcpio-install-calamares /mnt/usr/share/libalpm/scripts/
 chmod +x /mnt/usr/share/libalpm/scripts/mkinitcpio-install-calamares
 
-echo -e "${BYellow}[ * ]Copying mkinitcpio-install-calamares${End_Colour}"
+echo -e "${BYellow}[ * ]Copying 90-mkinitcpio-install.hook${End_Colour}"
 mkdir -p /mnt/etc/pacman.d/hooks/
 cp /etc/calamares/scripts/90-mkinitcpio-install.hook /mnt/etc/pacman.d/hooks/
 
@@ -42,7 +42,7 @@ cp /etc/calamares/scripts/90-mkinitcpio-install.hook /mnt/etc/pacman.d/hooks/
 ## shellprocess@initialize_pacman
 #
 # generate pacman keyring, mirrorlist and copy them into target system
-echo -e "${BBlue}[ * ]Running shellprocess@modify_mk_hook${End_Colour}"
+echo -e "${BBlue}[ * ]Running shellprocess@initialize_pacman${End_Colour}"
 echo -e "${BYellow}[ * ]Updating mirrorlist${End_Colour}"
 bash /etc/calamares/scripts/update-mirrorlist
 pacman -Sy --noconfirm archlinux-keyring cachyos-keyring
@@ -105,12 +105,12 @@ cp /etc/calamares/scripts/enable-ufw /mnt/etc/calamares/scripts/enable-ufw
 
 echo -e "${BBlue}[ * ]Running locale${End_Colour}"
 echo -e "${BYellow}[ * ]Adding en_US to locale${End_Colour}"
-if arch-chroot /mnt grep -q "^en_US.UTF-8 UTF-8" /etc/locale.gen; then
+if ! arch-chroot /mnt grep -q "^en_US.UTF-8 UTF-8" /etc/locale.gen; then
     arch-chroot /mnt bash -c 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
 fi
 echo -e "${BYellow}[ * ]Adding ja_JP to locale${End_Colour}"
-if grep -q "^ja_JP.UTF-8 UTF-8" /etc/locale.gen; then
-    arch-chroot /mnt bash -c 'echo "ja_JP.UTF-8 UTF-8" >> /mnt/etc/locale.gen'
+if ! arch-chroot /mnt grep -q "^ja_JP.UTF-8 UTF-8" /etc/locale.gen; then
+    arch-chroot /mnt bash -c 'echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen'
 fi
 echo -e "${BYellow}[ * ]Generating locale${End_Colour}"
 arch-chroot /mnt locale-gen
