@@ -81,17 +81,46 @@ cp /etc/calamares/scripts/remove-ucode /mnt/etc/calamares/scripts/remove-ucode
 cp /etc/calamares/scripts/enable-ufw /mnt/etc/calamares/scripts/enable-ufw
 
 #
+## arch-chroot
+#
+arch-chroot /mnt
+
+#
 ## locale
 #
 
 if grep -q "^en_US.UTF-8 UTF-8" /etc/locale.gen; then
     echo "en_US.UTF-8 UTF-8" | tee --append /etc/locale.gen
 fi
-
 if grep -q "^ja_JP.UTF-8 UTF-8" /etc/locale.gen; then
     echo "ja_JP.UTF-8 UTF-8" | tee --append /etc/locale.gen
 fi
+cat <<EOF | tee /etc/locale.conf > /dev/null
+LANG=en_US.UTF-8
+LC_ADDRESS=ja_JP.UTF-8
+LC_CTYPE=en_US.UTF-8
+LC_COLLATE=en_US.UTF-8
+LC_IDENTIFICATION=ja_JP.UTF-8
+LC_MEASUREMENT=en_US.UTF-8
+LC_MONETARY=en_US.UTF-8
+LC_MESSAGES=en_US.UTF-8
+LC_NAME=ja_JP.UTF-8
+LC_NUMERIC=en_US.UTF-8
+LC_PAPER=en_US.UTF-8
+LC_TELEPHONE=ja_JP.UTF-8
+LC_TIME=ja_JP.UTF-8
+EOF
+
+#
+## shellprocess@before-online
+#
+/etc/calamares/scripts/try-v3
+rm /etc/calamares/scripts/try-v3
 
 
+#
+## fstab
+#
+genfstab -U /mnt | tee /etc/fstab
 
 #makepkg -si ./PKGBUILD
