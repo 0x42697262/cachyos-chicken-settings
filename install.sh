@@ -163,11 +163,12 @@ arch-chroot /mnt rm /etc/calamares/scripts/try-v3
 #
 ## install custom packages
 #
-echo -e "${BYellow}[ * ]Installing chicken-settings packages${End_Colour}"
-mkdir -p /mnt/tmp
-cp ./PKGBUILD /mnt/tmp/chicken-settings
+mkdir -p /mnt/tmp/chicken-settings/
+cp ./PKGBUILD /mnt/tmp/chicken-settings/PKGBUILD
+echo -e "${BYellow}[ * ](arch-chroot) Syncing pacman packages${End_Colour}"
 arch-chroot /mnt pacman -Sy
-arch-chroot /mnt bash -c "cd /tmp && makepkg -si"
+echo -e "${BYellow}[ * ]Installing chicken-settings packages${End_Colour}"
+arch-chroot /mnt bash -c "cd /tmp/chicken-settings/ && makepkg -si"
 
 
 #
