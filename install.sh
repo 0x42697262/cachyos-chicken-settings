@@ -11,6 +11,7 @@ if (( EUID != 0)); then
     echo "You must be root to install CachyOS." 1>&2
     exit 100
 fi
+USER=birb
 
 
 #
@@ -68,25 +69,28 @@ echo -e "${BYellow}[ * ]Running pacstrap${End_Colour}"
 pacstrap -K /mnt \
     base \
     base-devel \
+    cachyos-fish-config \
     cachyos-hooks \
     cachyos-keyring \
     cachyos-mirrorlist \
-    cachyos-v4-mirrorlist \
-    cachyos-v3-mirrorlist \
+    cachyos-plymouth-theme \
     cachyos-rate-mirrors \
     cachyos-settings \
-    cachyos-fish-config \
-    plymouth \
-    cachyos-plymouth-theme \
+    cachyos-v3-mirrorlist \
+    cachyos-v4-mirrorlist \
+    cryptsetup \
     linux-cachyos \
     linux-cachyos-headers \
     linux-firmware \
-    cryptsetup \
     lvm2 \
     mkinitcpio \
+    networkmanager \
+    plymouth \
     sudo \
+    systemd-boot-manager \
+    ufw \
     usbutils \
-    systemd-boot-manager
+    util-linux
 
 #
 # postInstallFiles is an array of file names which will be copied into the system
@@ -155,24 +159,92 @@ echo -e "${BYellow}[ * ]Checking for V3 support${End_Colour}"
 arch-chroot /mnt /etc/calamares/scripts/try-v3
 arch-chroot /mnt rm /etc/calamares/scripts/try-v3
 
+
+#
+## install custom packages
+#
+echo -e "${BYellow}[ * ]Installing chicken-settings packages${End_Colour}"
+mkdir -p /mnt/tmp
+cp ./PKGBUILD /mnt/tmp/chicken-settings
+arch-chroot bash -c "cd /tmp && makepkg -si"
+
+
 #
 ## initcpiocfg
 #
 echo -e "${BYellow}[ * ]Running mkinitcpio${End_Colour}"
 arch-chroot /mnt bash -c "source /etc/mkinitcpio.conf && mkinitcpio -p linux-cachyos"
 
+
 #
 ## users
 #
-echo -e "${BYellow}[ * ]Adding user birb${End_Colour}"
-arch-chroot /mnt useradd -m -G wheel -s /bin/fish birb
-arch-chroot /mnt usermod -aG birb,sys,network,rfkill,users,video,storage,lp,audio birb
+echo -e "${BYellow}[ * ]Adding user $USER${End_Colour}"
+arch-chroot /mnt useradd -m $USER
+arch-chroot /mnt usermod -aG $USER,sys,network,rfkill,users,video,storage,lp,audio,wheel $USER
+
+echo -e "${BYellow}[ * ]Adding user $USER to sudoers${End_Colour}"
+arch-chroot /mnt bash -c "echo '%wheel ALL=(ALL) ALL' | EDITOR='tee' visudo -f /etc/sudoers.d/wheel"
+
+echo -e "${BYellow}[ * ]Changing shell of user $USER to /bin/fish${End_Colour}"
+arch-chroot /mnt chsh -s /bin/fish $USER
+
+echo -e "${BRed}[ * ]SET ROOT PASSWORD${End_Colour}"
+arch-chroot /mnt passwd 
+echo -e "${BRed}[ * ]SET USER $USER PASSWORD${End_Colour}"
+arch-chroot /mnt passwd $USER 
+
+echo -e "${BYellow}[ * ]Setting hostname${End_Colour}"
+arch-chroot /mnt bash -c "echo PlasmaPhoenix > /etc/hostname"
+
 
 #
 ## shellprocess@removeucode
 #
 echo -e "${BYellow}[ * ]Removing unused microcode${End_Colour}"
-arch-chroot /mnt /etc/calamares/scripts/remove-ucode
+arch-chroot /mnt bash -c "/etc/calamares/scripts/remove-ucode"
 arch-chroot /mnt rm /etc/calamares/scripts/remove-ucode
 
-#makepkg -si ./PKGBUILD
+
+#
+## shellprocess@reset_mk_hook
+#
+echo -e "${BYellow}[ * ]Resetting mkinitcpio hooks${End_Colour}"
+arch-chroot /mnt rm /etc/pacman.d/hooks/90-mkinitcpio-install.hook
+arch-chroot /mnt rm /usr/share/libalpm/scripts/mkinitcpio-install-calamares
+
+
+#
+## services-systemd
+#
+echo -e "${BYellow}[ * ]Enabling systemd services${End_Colour}"
+arch-chroot /mnt systemctl enable NetworkManager ufw multi-user.target fstrim.timer
+
+
+#
+## shellprocess
+#
+echo -e "${BYellow}[ * ]Executing shellprocess cleanup${End_Colour}"
+arch-chroot /mnt rm /etc/systemd/system/etc-pacman.d-gnupg.mount
+arch-chroot /mnt rm /etc/systemd/system/display-manager.service
+arch-chroot /mnt /usr/local/bin/dmcheck
+arch-chroot /mnt rm /usr/local/bin/dmcheck
+arch-chroot /mnt rm -rf /home/liveuser
+arch-chroot /mnt runuser $USER -c "cp -rf /etc/skel/. /home/$USER/."
+arch-chroot /mnt runuser $USER -c "rm -rf /home/$USER/{.xsession,.xprofile,.xinitrc}"
+
+
+#
+## shellprocess@enable_sdboot
+#
+echo -e "${BYellow}[ * ]Generating systemd-boot${End_Colour}"
+arch-chroot /mnt rm -rf /boot/loader/entries/*
+arch-chroot /mnt sdboot-manage gen
+
+
+#
+## shellprocess@enable_ufw
+#
+echo -e "${BYellow}[ * ]Enabling UFW${End_Colour}"
+arch-chroot /mnt /etc/calamares/scripts/enable-ufw
+arch-chroot /mnt rm /etc/calamares/scripts/enable-ufw
