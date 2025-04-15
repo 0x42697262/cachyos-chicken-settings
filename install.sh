@@ -59,6 +59,8 @@ pacstrap -K /mnt \
     cachyos-v3-mirrorlist \
     cachyos-rate-mirrors \
     cachyos-settings \
+    plymouth \
+    cachyos-plymouth-theme \
     linux-cachyos \
     linux-cachyos-headers \
     linux-firmware
@@ -111,6 +113,7 @@ LC_TELEPHONE=ja_JP.UTF-8
 LC_TIME=ja_JP.UTF-8
 EOF
 
+
 #
 ## shellprocess@before-online
 #
@@ -122,5 +125,9 @@ rm /etc/calamares/scripts/try-v3
 ## fstab
 #
 genfstab -U /mnt | tee /etc/fstab
+
+#
+## 
+#
 
 #makepkg -si ./PKGBUILD
