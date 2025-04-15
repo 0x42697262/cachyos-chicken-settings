@@ -1,8 +1,8 @@
 # Maintainer: 0x42697262
 
 pkgname=chicken-settings
-pkgver=1.0.1
-pkgrel=1
+pkgver=1.0.2
+pkgrel=0
 pkgdesc="0x42697262's system configuration, packages, and probably even home config"
 url=""
 depends=(
@@ -84,6 +84,7 @@ depends=(
     mesa-utils
     mlocate
     mtools
+    neovim
     netcat
     netctl
     nfs-utils
