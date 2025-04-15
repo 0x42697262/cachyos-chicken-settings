@@ -166,7 +166,8 @@ arch-chroot /mnt rm /etc/calamares/scripts/try-v3
 echo -e "${BYellow}[ * ]Installing chicken-settings packages${End_Colour}"
 mkdir -p /mnt/tmp
 cp ./PKGBUILD /mnt/tmp/chicken-settings
-arch-chroot bash -c "cd /tmp && makepkg -si"
+arch-chroot /mnt pacman -Sy
+arch-chroot /mnt bash -c "cd /tmp && makepkg -si"
 
 
 #
