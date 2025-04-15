@@ -186,7 +186,7 @@ arch-chroot /mnt useradd -m $USER
 arch-chroot /mnt usermod -aG $USER,sys,network,rfkill,users,video,storage,lp,audio,wheel $USER
 
 echo -e "${BYellow}[ * ]Adding user $USER to sudoers${End_Colour}"
-arch-chroot /mnt bash -c "echo '%wheel ALL=(ALL) ALL' | EDITOR='tee' visudo -f /etc/sudoers.d/wheel"
+arch-chroot /mnt bash -c "echo '%wheel ALL=(ALL:ALL) ALL' | EDITOR='tee' visudo -f /etc/sudoers.d/wheel"
 
 echo -e "${BYellow}[ * ]Changing shell of user $USER to /bin/fish${End_Colour}"
 arch-chroot /mnt chsh -s /bin/fish $USER
