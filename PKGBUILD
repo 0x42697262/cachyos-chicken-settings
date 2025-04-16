@@ -1,7 +1,7 @@
 # Maintainer: 0x42697262
 
 pkgname=chicken-settings
-pkgver=1.0.3
+pkgver=1.1.0
 pkgrel=0
 pkgdesc="0x42697262's system configuration, packages, and probably even home config"
 url=""
@@ -20,12 +20,22 @@ depends=(
     btop
     btrfs-progs
     cachy-browser
+    cachy-browser
     cachyos-ananicy-rules
+    cachyos-fish-config
     cachyos-hello
+    cachyos-hooks
+    cachyos-hyprland-settings
     cachyos-kernel-manager
+    cachyos-keyring
+    cachyos-mirrorlist
     cachyos-nord-gtk-theme-git
     cachyos-packageinstaller
+    cachyos-plymouth-theme
+    cachyos-rate-mirrors
     cachyos-settings
+    cachyos-v3-mirrorlist
+    cachyos-v4-mirrorlist
     cachyos-wallpapers
     cachyos-zsh-config
     cantarell-fonts
@@ -84,6 +94,7 @@ depends=(
     mesa-utils
     mlocate
     mtools
+    ncdu
     neovim
     netcat
     netctl
