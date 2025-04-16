@@ -164,8 +164,11 @@ arch-chroot /mnt rm /etc/calamares/scripts/try-v3
 #
 ## initcpiocfg
 #
+echo -e "${BYellow}[ * ]Updating mkinitcpio hooks${End_Colour}"
+arch-chroot /mnt sed -i 's/^HOOKS=(.*)/HOOKS=(base systemd udev autodetect microcode modconf kms keyboard keymap consolefont sd-encrypt block lvm2 filesystems fsck)/' /etc/mkinitcpio.conf
+
 echo -e "${BYellow}[ * ]Running mkinitcpio${End_Colour}"
-arch-chroot /mnt bash -c "source /etc/mkinitcpio.conf && mkinitcpio -p linux-cachyos"
+arch-chroot /mnt bash -c "source /etc/mkinitcpio.conf && mkinitcpio -P"
 
 
 #
