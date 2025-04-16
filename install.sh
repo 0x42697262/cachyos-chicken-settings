@@ -234,6 +234,7 @@ arch-chroot /mnt runuser $USER -c "rm -rf /home/$USER/{.xsession,.xprofile,.xini
 #
 echo -e "${BYellow}[ * ]Generating systemd-boot${End_Colour}"
 arch-chroot /mnt rm -rf /boot/loader/entries/*
+arch-chroot /mnt sdboot-manage setup
 arch-chroot /mnt sdboot-manage gen
 
 
