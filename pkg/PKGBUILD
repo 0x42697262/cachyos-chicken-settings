@@ -11,7 +11,7 @@ pkgname=(
 	chicken-settings-nvidia
 	chicken-settings-virtualization
 )
-pkgver=2.13.0
+pkgver=2.15.4
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -104,6 +104,8 @@ package_chicken-settings-base(){
 
     # microcode
     depends+=( amd-ucode )
+
+    install=chicken-settings-base.install
 }
 
 

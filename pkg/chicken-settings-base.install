@@ -1,0 +1,11 @@
+_configure_mkinitcpio(){
+    sed -i 's/^HOOKS=(.*)/HOOKS=(base systemd udev autodetect microcode modconf kms keyboard keymap consolefont sd-encrypt block lvm2 filesystems fsck)/' /etc/mkinitcpio.conf
+}
+
+post_upgrade(){
+    _configure_mkinitcpio
+}
+
+post_install(){
+    mkinitcpio -P
+}
