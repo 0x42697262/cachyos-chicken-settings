@@ -10,7 +10,7 @@ pkgname=(
 	chicken-settings-fonts
 	chicken-settings-nvidia
 )
-pkgver=2.0.0
+pkgver=2.0.1
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -85,7 +85,7 @@ package_chicken-settings-base(){
 
 
 package_chicken-settings-pkgs(){
-    pkgsdesk='chicken-settings packages and tools'
+    pkgdesc='chicken-settings packages and tools'
 
     depends=(
 	    btop
