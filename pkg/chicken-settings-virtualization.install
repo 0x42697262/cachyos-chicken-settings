@@ -1,13 +1,36 @@
 _configure_incus(){
-    INCUS_DIR=/home/_birb/incus/
+    INCUS_DIR=/home/_birb/incus
 
+    # create incus directory
     if [ ! -d "$INCUS_DIR" ]; then
-        mkdir -p $INCUS_DIR
-        ln -sf $INCUS_DIR /var/lib/incus
+        mkdir --parents $INCUS_DIR
     else
         echo "$INCUS_DIR already exists."
     fi
 
+    # create /var/lib/incus directory
+    if [ ! -d "/nix" ]; then
+        mkdir --parents /var/lib/incus/
+    fi
+
+    # add /home/_birb/incus to /etc/fstab
+    if ! grep -q "^$INCUS_DIR" "/etc/fstab"; then
+        echo "Generating incus fstab configuration..."
+	cat << EOF >> /etc/fstab
+
+# incus
+/home/_birb/incus /var/lib/incus none bind 0 0
+EOF
+    else
+        echo "incus fstab already exists."
+    fi
+
+    # mount /var/lib/incus
+    if ! mountpoint -q /; then
+        mount /var/lib/incus
+    fi
+
+    # check if "default" storage pool exists
     if ! incus storage list --format csv | grep -q '^default,'; then
 
         systemctl stop incus.socket incus.service incus-user.socket
@@ -18,11 +41,13 @@ _configure_incus(){
         echo "Storage pool 'default' already exists."
     fi
 
+    # check if user birb is part of incus group
     if ! getent group "incus" | grep "birb"; then
         usermod -aG incus birb
     else
         echo "User birb is already part of the incus group."
     fi
+    # check if user birb is part of incus-admin group
     if ! getent group "incus-admin" | grep "birb"; then
         usermod -aG incus-admin birb
     else
