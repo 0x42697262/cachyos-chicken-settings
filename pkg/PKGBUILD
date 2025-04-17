@@ -11,7 +11,7 @@ pkgname=(
 	chicken-settings-nvidia
 	chicken-settings-virtualization
 )
-pkgver=2.5.0
+pkgver=2.7.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -19,7 +19,7 @@ url=""
 license=('none')
 source=()
 sha256sums=()
-makedepends=( paru )
+makedepends=( paru util-linux )
 
 prepare(){
     paru -S wl-clipboard-rs
