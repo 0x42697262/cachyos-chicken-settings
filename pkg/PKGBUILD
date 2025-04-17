@@ -10,7 +10,7 @@ pkgname=(
 	chicken-settings-fonts
 	chicken-settings-nvidia
 )
-pkgver=2.0.1
+pkgver=2.0.4
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -18,6 +18,11 @@ url=""
 license=('none')
 source=()
 sha256sums=()
+makedepends=( paru )
+
+prepare(){
+    paru -S  wl-clipboard-rs
+}
 
 package_chicken-settings-base(){
     pkgdesc='Base system configuration'
@@ -114,10 +119,9 @@ package_chicken-settings-pkgs(){
 	    vi
 	    vim
 	    wget
+	    wl-clipboard-rs
 	    zathura
     )
-
-    #    wl-clipboard-rs (aur)
 
     # packages management
     depends+=(
