@@ -26,16 +26,15 @@ EOF
     fi
 
     # mount /var/lib/incus
-    if ! mountpoint -q /; then
+    if ! mountpoint -q /var/lib/incus; then
         mount /var/lib/incus
     fi
 
+    systemctl stop incus.socket incus.service incus-user.socket
+    systemctl start incus.socket incus.service incus-user.socket
+
     # check if "default" storage pool exists
     if ! incus storage list --format csv | grep -q '^default,'; then
-
-        systemctl stop incus.socket incus.service incus-user.socket
-        systemctl start incus.socket incus.service incus-user.socket
-
         incus admin init --minimal
     else
         echo "Storage pool 'default' already exists."
