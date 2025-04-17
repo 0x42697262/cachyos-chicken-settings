@@ -50,8 +50,8 @@ package_chicken-settings-base(){
     depends+=(
 	    base
 	    btrfs-progs
-	    cachyos/paru
-	    cachyos/plymouth
+	    paru
+	    plymouth
 	    networkmanager
 	    sudo
 	    systemd-boot-manager
