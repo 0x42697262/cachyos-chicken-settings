@@ -11,7 +11,7 @@ pkgname=(
 	chicken-settings-nvidia
 	chicken-settings-virtualization
 )
-pkgver=2.9.0
+pkgver=2.13.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -33,24 +33,14 @@ sha256sums=(
         998b99f40b5ad59bfe6ddd4575c40b598ab60b70547d396fcb47f885644bf313
         6429c51073ed8726466a507cd3af5c5fe57dc22002b39646e60ab6840c768a4a
 )
-makedepends=( util-linux archlinux-keyring cachyos-keyring )
-optdepends=(
-  'wl-clipboard-rs: clipboard support (Rust version)'
-  'wl-clipboard: clipboard support (C version, official repo)'
+makedepends=(
+        archlinux-keyring
+	cachyos-v3-mirrorlist
+	cachyos-v4-mirrorlist
+        cachyos-keyring 
+        cachyos-mirrorlist
 )
 
-
-prepare(){
-    install -Dm0644 cachyos-mirrorlist "$pkgdir/etc/pacman.d/cachyos-mirrorlist"
-    install -Dm0644 cachyos-v3-mirrorlist "$pkgdir/etc/pacman.d/cachyos-v3-mirrorlist"
-    install -Dm0644 cachyos-v4-mirrorlist "$pkgdir/etc/pacman.d/cachyos-v4-mirrorlist"
-    install -Dm0644 mirrorlist "$pkgdir/etc/pacman.d/mirrorlist"
-    install -Dm0644 pacman-more.conf "$pkgdir/etc/pacman-more.conf"
-    install -Dm0644 pacman.conf "$pkgdir/etc/pacman.conf"
-    #pacman -Sy --noconfirm archlinux-keyring cachyos-keyring
-
-    #paru -S wl-clipboard-rs
-}
 
 package_chicken-settings-base(){
     pkgdesc='Base system configuration'
@@ -149,7 +139,7 @@ package_chicken-settings-pkgs(){
 	    vi
 	    vim
 	    wget
-	    wl-clipboard-rs
+	    wl-clipboard
 	    zathura
     )
 
@@ -214,6 +204,10 @@ package_chicken-settings-pkgs(){
 	    poppler-glib
 	    xdg-user-dirs
 	    xdg-utils
+    )
+
+    optdepends=(
+      'wl-clipboard-rs: clipboard support (Rust version)'
     )
 }
 
