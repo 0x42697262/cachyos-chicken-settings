@@ -11,18 +11,45 @@ pkgname=(
 	chicken-settings-nvidia
 	chicken-settings-virtualization
 )
-pkgver=2.7.0
+pkgver=2.9.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
 url=""
 license=('none')
-source=()
-sha256sums=()
-makedepends=( paru util-linux )
+source=(
+	cachyos-mirrorlist
+	cachyos-v3-mirrorlist
+	cachyos-v4-mirrorlist
+	mirrorlist
+	pacman-more.conf
+	pacman.conf
+)
+sha256sums=(
+        931351e3b0856b14691cebf374b9c6f5dbd991a6a972497eefa065f8641241dd
+        610b6862e6d5a55796111a989c110536ef04a33a523fde0b86374ab6f0aeda08
+        a2d0c5266ea941ce0ea912fc29087c41f4dad63d06e69f59f3bd0897c4901a06
+        c4ea5d9214cc85b1796c9881c8001bd840de057dc909c3bc90807576a21cf688
+        998b99f40b5ad59bfe6ddd4575c40b598ab60b70547d396fcb47f885644bf313
+        6429c51073ed8726466a507cd3af5c5fe57dc22002b39646e60ab6840c768a4a
+)
+makedepends=( util-linux archlinux-keyring cachyos-keyring )
+optdepends=(
+  'wl-clipboard-rs: clipboard support (Rust version)'
+  'wl-clipboard: clipboard support (C version, official repo)'
+)
+
 
 prepare(){
-    paru -S wl-clipboard-rs
+    install -Dm0644 cachyos-mirrorlist "$pkgdir/etc/pacman.d/cachyos-mirrorlist"
+    install -Dm0644 cachyos-v3-mirrorlist "$pkgdir/etc/pacman.d/cachyos-v3-mirrorlist"
+    install -Dm0644 cachyos-v4-mirrorlist "$pkgdir/etc/pacman.d/cachyos-v4-mirrorlist"
+    install -Dm0644 mirrorlist "$pkgdir/etc/pacman.d/mirrorlist"
+    install -Dm0644 pacman-more.conf "$pkgdir/etc/pacman-more.conf"
+    install -Dm0644 pacman.conf "$pkgdir/etc/pacman.conf"
+    #pacman -Sy --noconfirm archlinux-keyring cachyos-keyring
+
+    #paru -S wl-clipboard-rs
 }
 
 package_chicken-settings-base(){
