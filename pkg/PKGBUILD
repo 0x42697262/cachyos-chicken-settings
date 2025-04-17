@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-virtualization
 	chicken-settings-nix
 )
-pkgver=2.17.8
+pkgver=2.18.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -38,8 +38,8 @@ sha256sums=(
 )
 makedepends=(
         archlinux-keyring
-	cachyos-v3-mirrorlist
-	cachyos-v4-mirrorlist
+	    cachyos-v3-mirrorlist
+	    cachyos-v4-mirrorlist
         cachyos-keyring 
         cachyos-mirrorlist
 )
@@ -50,12 +50,12 @@ package_chicken-settings-base(){
 
     # base packages
     depends=(
-            base
+        base
 	    base-devel
 	    cryptsetup 	                # luks support
 	    linux-firmware
 	    lvm2                        # lvm support
-	    mkinitcpio 		        # modular initramfs image creation utility
+	    mkinitcpio 		            # modular initramfs image creation utility
     )
 
     # cachyos packages
@@ -85,24 +85,24 @@ package_chicken-settings-base(){
 	    ufw
 	    usbutils
 	    util-linux
-            chwd
-            device-mapper
-            diffutils
-            dosfstools
-            efibootmgr
-            exfatprogs
-            inetutils
-            iptables-nft
-            jfsutils
-            less
-            logrotate
-            lsb-release
-            man-db
-            man-pages
+        chwd
+        device-mapper
+        diffutils
+        dosfstools
+        efibootmgr
+        exfatprogs
+        inetutils
+        iptables-nft
+        jfsutils
+        less
+        logrotate
+        lsb-release
+        man-db
+        man-pages
 	    pacman
-            sysfsutils
-            which
-            xfsprogs
+        sysfsutils
+        which
+        xfsprogs
     )
 
     # microcode
@@ -116,22 +116,14 @@ package_chicken-settings-pkgs(){
     pkgdesc='chicken-settings packages and tools'
 
     depends=(
-	    btop
 	    duf
-	    fastfetch
 	    findutils
 	    fsarchiver
 	    git
 	    glances
 	    inxi
-	    kitty
 	    meld
 	    mesa-utils
-	    ncdu
-	    neovim
-	    netcat
-	    nmap
-	    openssh
 	    perl
 	    python
 	    pv
@@ -141,12 +133,26 @@ package_chicken-settings-pkgs(){
 	    texinfo
 	    udiskie
 	    usb_modeswitch
+    )
+
+    # terminal apps and tools
+    depends+=(
+	    btop
+	    fastfetch
+	    kitty
+	    lazygit
+	    lsd
+	    ncdu
+	    neovim
+	    netcat
+	    nmap
+	    openssh
 	    vi
 	    vim
 	    wget
 	    wl-clipboard
 	    zathura
-    )
+	)
 
     # packages management
     depends+=(
