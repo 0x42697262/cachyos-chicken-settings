@@ -1,0 +1,298 @@
+# Maintainer: 0x42697262
+
+pkgbase=chicken-settings
+pkgname=(
+	chicken-settings-base
+	chicken-settings-pkgs
+	chicken-settings-cachy-pkgs
+	chicken-settings-desktop-hyprland
+	chicken-settings-audio
+	chicken-settings-fonts
+	chicken-settings-nvidia
+)
+pkgver=2.0.0
+pkgrel=0
+pkgdesc="0x42697262's CachyOS system configurations and packages"
+arch=('x86_64')
+url=""
+license=('none')
+source=()
+sha256sums=()
+
+package_chicken-settings-base(){
+    pkgdesc='Base system configuration'
+
+    # base packages
+    depends=(
+            base
+	    base-devel
+	    cryptsetup 	                # luks support
+	    linux-firmware
+	    lvm2                        # lvm support
+	    mkinitcpio 		        # modular initramfs image creation utility
+    )
+
+    # cachyos packages
+    depends+=(
+	    cachyos-hooks
+	    cachyos-keyring
+	    cachyos-mirrorlist
+	    cachyos-plymouth-theme
+	    cachyos-rate-mirrors
+	    cachyos-settings
+	    cachyos-v3-mirrorlist
+	    cachyos-v4-mirrorlist
+	    linux-cachyos
+	    linux-cachyos-headers
+    )
+
+    # system packages
+    depends+=(
+	    base
+	    btrfs-progs
+	    cachyos/paru
+	    cachyos/plymouth
+	    networkmanager
+	    sudo
+	    systemd-boot-manager
+	    ufw
+	    usbutils
+	    util-linux
+            chwd
+            device-mapper
+            diffutils
+            dosfstools
+            efibootmgr
+            exfatprogs
+            inetutils
+            iptables-nft
+            jfsutils
+            less
+            logrotate
+            lsb-release
+            man-db
+            man-pages
+	    pacman
+            sysfsutils
+            which
+            xfsprogs
+    )
+
+    # microcode
+    depends+=( amd-ucode )
+}
+
+
+package_chicken-settings-pkgs(){
+    pkgsdesk='chicken-settings packages and tools'
+
+    depends=(
+	    btop
+	    duf
+	    fastfetch
+	    findutils
+	    fsarchiver
+	    git
+	    glances
+	    inxi
+	    kitty
+	    meld
+	    mesa-utils
+	    ncdu
+	    neovim
+	    netcat
+	    nmap
+	    openssh
+	    pv
+	    ripgrep
+	    rsync
+	    sed
+	    texinfo
+	    udiskie
+	    usb_modeswitch
+	    vi
+	    vim
+	    wget
+	    wpa_supplicant
+    )
+
+    #    wl-clipboard-rs (aur)
+
+    # packages management
+    depends+=(
+	    octopi
+	    pacman-contrib
+	    pkgfile
+	    rebuild-detector
+	    reflector
+	    )
+
+    # filesystem tools
+    depends+=(
+	    e2fsprogs
+	    efitools
+	    haveged
+	    nfs-utils
+	    nilfs-utils
+	    ntp
+	    smartmontools
+	    unrar
+	    unzip
+	    xz
+    )
+
+    # power management
+    depends+=(
+	    cpupower
+	    power-profiles-daemon
+	    upower
+    )
+
+    # hardware
+    depends+=(
+	    dmidecode
+	    dmraid
+	    hdparm
+	    hwdetect
+	    hwinfo
+	    lsscsi
+	    mtools
+	    sg3_utils
+	    sof-firmware
+    )
+
+    # desktop integration
+    depends+=(
+	    accountsservice
+	    bash-completion
+	    ffmpegthumbnailer
+	    gst-libav
+	    gst-plugin-pipewire
+	    gst-plugins-bad
+	    gst-plugins-ugly
+	    libdvdcss
+	    libgsf
+	    libopenraw
+	    mlocate
+	    poppler-glib
+	    xdg-user-dirs
+	    xdg-utils
+    )
+}
+
+
+package_chicken-settings-cachy-pkgs() {
+    pkgdesc='CachyOS PKGBUILDs'
+
+    depends=(
+	    cachyos-ananicy-rules
+	    cachyos-fish-config
+	    cachyos-kernel-manager
+	    cachyos-packageinstaller
+	    cachyos-zsh-config
+    )
+}
+
+package_chicken-settings-desktop-hyprland(){
+    pkgdesc='Hyprland Desktop'
+
+    depends=(
+	    bemenu
+	    bemenu-wayland
+	    cachy-browser
+	    cachyos-hello
+	    cachyos-hyprland-settings
+	    cachyos-nord-gtk-theme-git
+	    cachyos-wallpapers
+	    capitaine-cursors
+	    grimblast-git
+	    hyprland
+	    kvantum
+	    kvantum-theme-nordic-git
+	    mako
+	    pamixer
+	    polkit-kde-agent
+	    qt5ct
+	    rofi
+	    rofi-emoji
+	    slurp
+	    swappy
+	    swaybg
+	    swaylock-effects-git
+	    swaylock-fancy-git
+	    waybar
+	    wlogout
+	    wob
+	    wofi
+	    xdg-desktop-portal-hyprland
+	    xorg-xwayland
+    )
+}
+
+package_chicken-settings-audio(){
+    pkgdesk='Audio handling tools apps and libs'
+
+    depends=(
+	    alsa-firmware
+	    alsa-plugins
+	    alsa-utils
+	    pavucontrol
+	    pipewire-alsa
+	    pipewire-pulse
+	    rtkit
+	    wireplumber
+    )
+}
+
+package_chicken-settings-fonts(){
+    pkgdesc='Fonts configuration'
+
+    # adobe fonts
+    depends=(
+	    adobe-source-han-sans-cn-fonts
+	    adobe-source-han-sans-jp-fonts
+	    adobe-source-han-sans-kr-fonts
+    )
+
+    # noto fonts
+    depends+=(
+	    noto-color-emoji-fontconfig
+	    noto-fonts
+	    noto-fonts-cjk
+	    noto-fonts-emoji
+    )
+
+    # terminal fonts
+    depends+=(
+	    awesome-terminal-fonts
+    )
+
+    # ttf
+    depends+=(
+	    ttf-bitstream-vera
+	    ttf-dejavu
+	    ttf-liberation
+	    ttf-meslo-nerd
+	    ttf-opensans
+    )
+
+    # others
+    depends+=(
+	    freetype2
+	    cantarell-fonts
+	    opendesktop-fonts
+	    ttf-meslo-nerd
+    )
+    # from aur
+    # ttf-vista-fonts
+}
+
+
+package_chicken-settings-nvidia(){
+    pkgdesc='Nvidia graphics configuration'
+
+    depends=(
+	    linux-cachyos-nvidia-open
+	    nvidia-open
+    )
+}
