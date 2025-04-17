@@ -11,7 +11,7 @@ pkgname=(
 	chicken-settings-nvidia
 	chicken-settings-virtualization
 )
-pkgver=2.1.12
+pkgver=2.2.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -22,7 +22,7 @@ sha256sums=()
 makedepends=( paru )
 
 prepare(){
-    paru -S  wl-clipboard-rs
+    paru -S wl-clipboard-rs
 }
 
 package_chicken-settings-base(){
@@ -165,6 +165,8 @@ package_chicken-settings-pkgs(){
 	    mtools
 	    sg3_utils
 	    sof-firmware
+	    vulkan-radeon
+	    xf86-video-amdgpu
     )
 
     # desktop integration
