@@ -11,7 +11,7 @@ pkgname=(
 	chicken-settings-nvidia
 	chicken-settings-virtualization
 )
-pkgver=2.2.0
+pkgver=2.4.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -300,8 +300,18 @@ package_chicken-settings-nvidia(){
     pkgdesc='Nvidia graphics configuration'
 
     depends=(
+	    lib32-mesa
+	    lib32-nvidia-utils
+	    lib32-opencl-nvidia
+	    lib32-vulkan-radeon
+	    libva-nvidia-driver
+	    libva-nvidia-driver
 	    linux-cachyos-nvidia-open
 	    nvidia-open
+	    nvidia-prime
+	    nvidia-settings
+	    opencl-nvidia
+	    switcheroo-control
     )
 }
 
