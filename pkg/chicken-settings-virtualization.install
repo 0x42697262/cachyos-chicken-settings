@@ -1,0 +1,39 @@
+_configure_incus(){
+    INCUS_DIR=/home/_birb/incus/
+
+    if [ ! -d "$INCUS_DIR" ]; then
+        mkdir -p $INCUS_DIR
+        ln -sf $INCUS_DIR /var/lib/incus
+    else
+        echo "$INCUS_DIR already exists."
+    fi
+
+    if ! incus storage list --format csv | grep -q '^default,'; then
+
+        systemctl stop incus.socket incus.service incus-user.socket
+        systemctl start incus.socket incus.service incus-user.socket
+
+        incus admin init --minimal
+    else
+        echo "Storage pool 'default' already exists."
+    fi
+
+    if ! getent group "incus" | grep "birb"; then
+        usermod -aG incus birb
+    else
+        echo "User birb is already part of the incus group."
+    fi
+    if ! getent group "incus-admin" | grep "birb"; then
+        usermod -aG incus-admin birb
+    else
+        echo "User birb is already part of the incus-admin group."
+    fi
+}
+
+post_upgrade(){
+    _configure_incus
+}
+
+post_install(){
+    post_upgrade
+}

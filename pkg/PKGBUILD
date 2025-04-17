@@ -9,8 +9,9 @@ pkgname=(
 	chicken-settings-audio
 	chicken-settings-fonts
 	chicken-settings-nvidia
+	chicken-settings-virtualization
 )
-pkgver=2.0.4
+pkgver=2.1.12
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -299,5 +300,14 @@ package_chicken-settings-nvidia(){
     depends=(
 	    linux-cachyos-nvidia-open
 	    nvidia-open
+    )
+}
+
+package_chicken-settings-virtualization(){
+    pkgdesc='Virtual machines and containers configuration'
+    install=chicken-settings-virtualization.install
+
+    depends=(
+	    incus
     )
 }
