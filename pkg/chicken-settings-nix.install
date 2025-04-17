@@ -1,0 +1,39 @@
+_configure_nix(){
+    NIX_DIR=/home/_birb/nix
+    if [ ! -d "$NIX_DIR" ]; then
+        echo "Creating $NIX_DIR..."
+        mkdir --parents "$NIX_DIR"
+    else
+        echo "$NIX_DIR already exists."
+    fi
+
+    # create /nix directory
+    if [ ! -d "/nix" ]; then
+	mkdir /nix/
+    fi
+
+    # add /home/_birb/nix to /etc/fstab
+    if ! grep -q "^$NIX_DIR" "/etc/fstab"; then
+        echo "Generating Nix fstab configuration..."
+	cat << EOF >> /etc/fstab
+
+# Nix Store
+/home/_birb/nix /nix none bind 0 0
+EOF
+    else
+        echo "Nix fstab already exists."
+    fi
+
+    # mount /nix
+    if ! mountpoint -q /nix; then
+        mount /nix
+    fi
+}
+
+post_upgrade(){
+    _configure_nix
+}
+
+post_install(){
+    post_upgrade 
+}

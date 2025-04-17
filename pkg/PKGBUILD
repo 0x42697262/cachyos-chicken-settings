@@ -10,8 +10,9 @@ pkgname=(
 	chicken-settings-fonts
 	chicken-settings-nvidia
 	chicken-settings-virtualization
+	chicken-settings-nix
 )
-pkgver=2.15.4
+pkgver=2.17.4
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -22,6 +23,7 @@ source=(
 	cachyos-v3-mirrorlist
 	cachyos-v4-mirrorlist
 	mirrorlist
+	nix.conf
 	pacman-more.conf
 	pacman.conf
 )
@@ -30,6 +32,7 @@ sha256sums=(
         610b6862e6d5a55796111a989c110536ef04a33a523fde0b86374ab6f0aeda08
         a2d0c5266ea941ce0ea912fc29087c41f4dad63d06e69f59f3bd0897c4901a06
         c4ea5d9214cc85b1796c9881c8001bd840de057dc909c3bc90807576a21cf688
+        ce1ac648592c5c67e5d42079b85d3f065737da16e3613a37116bdae00411499f
         998b99f40b5ad59bfe6ddd4575c40b598ab60b70547d396fcb47f885644bf313
         6429c51073ed8726466a507cd3af5c5fe57dc22002b39646e60ab6840c768a4a
 )
@@ -347,4 +350,11 @@ package_chicken-settings-virtualization(){
     depends=(
 	    incus
     )
+}
+
+package_chicken-settings-nix(){
+    pkgdesc='Nix configuration'
+    install=chicken-settings-nix.install
+
+    install -Dm0644 nix.conf "$pkgdir/etc/nix/nix.conf"
 }
