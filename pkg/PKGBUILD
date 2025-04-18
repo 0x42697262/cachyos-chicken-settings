@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-virtualization
 	chicken-settings-nix
 )
-pkgver=2.20.0
+pkgver=2.21.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -123,13 +123,10 @@ package_chicken-settings-pkgs(){
 	    duf
 	    findutils
 	    fsarchiver
-	    git
 	    glances
 	    inxi
 	    meld
 	    mesa-utils
-	    perl
-	    python
 	    pv
 	    ripgrep
 	    rsync
@@ -139,10 +136,18 @@ package_chicken-settings-pkgs(){
 	    usb_modeswitch
     )
 
+    # programming
+    depends+=(
+	    git
+	    perl
+	    python
+	)
+
     # terminal apps and tools
     depends+=(
 	    btop
 	    fastfetch
+	    gopass
 	    kitty
 	    lazygit
 	    lsd
