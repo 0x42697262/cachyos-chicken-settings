@@ -9,6 +9,7 @@ post_upgrade(){
 post_install(){
     mkinitcpio -P
 
+
     if ! grep -q "^en_US.UTF-8 UTF-8" /etc/locale.gen; then
         bash -c 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
     fi
@@ -16,4 +17,8 @@ post_install(){
         bash -c 'echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen'
     fi
     locale-gen
+
+
+    ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localetime
+    hwclock --systohc
 }
