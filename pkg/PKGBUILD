@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-virtualization
 	chicken-settings-nix
 )
-pkgver=2.18.1
+pkgver=2.19.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -22,6 +22,7 @@ source=(
 	cachyos-mirrorlist
 	cachyos-v3-mirrorlist
 	cachyos-v4-mirrorlist
+	locale.conf
 	mirrorlist
 	nix.conf
 	pacman-more.conf
@@ -31,6 +32,7 @@ sha256sums=(
         931351e3b0856b14691cebf374b9c6f5dbd991a6a972497eefa065f8641241dd
         610b6862e6d5a55796111a989c110536ef04a33a523fde0b86374ab6f0aeda08
         a2d0c5266ea941ce0ea912fc29087c41f4dad63d06e69f59f3bd0897c4901a06
+        c6710d49351ac3b4c921ddb46f84d58e03ad59fd363374bd8ab6f6e3d1aaf1f7
         c4ea5d9214cc85b1796c9881c8001bd840de057dc909c3bc90807576a21cf688
         ce1ac648592c5c67e5d42079b85d3f065737da16e3613a37116bdae00411499f
         998b99f40b5ad59bfe6ddd4575c40b598ab60b70547d396fcb47f885644bf313
@@ -109,6 +111,8 @@ package_chicken-settings-base(){
     depends+=( amd-ucode )
 
     install=chicken-settings-base.install
+
+    install -Dm0644 locale.conf "$pkgdir/etc/locale.conf"
 }
 
 
