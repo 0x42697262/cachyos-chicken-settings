@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-virtualization
 	chicken-settings-nix
 )
-pkgver=2.19.1
+pkgver=2.20.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -327,10 +327,10 @@ package_chicken-settings-fonts(){
 	    freetype2
 	    cantarell-fonts
 	    opendesktop-fonts
-	    ttf-meslo-nerd
     )
-    # from aur
-    # ttf-vista-fonts
+    optdepends=(
+      'ttf-vista-fonts: Microsoft Vista fonts'
+    )
 }
 
 
