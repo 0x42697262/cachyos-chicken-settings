@@ -52,6 +52,8 @@ EOF
     else
         echo "User birb is already part of the incus-admin group."
     fi
+
+    usermod -v 1000000-1000999999 -w 1000000-1000999999 root
 }
 
 post_upgrade(){
