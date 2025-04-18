@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-virtualization
 	chicken-settings-nix
 )
-pkgver=2.21.0
+pkgver=2.22.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -371,5 +371,5 @@ package_chicken-settings-nix(){
     pkgdesc='Nix configuration'
     install=chicken-settings-nix.install
 
-    install -Dm0644 nix.conf "$pkgdir/etc/nix/nix.conf"
+    install -Dm0555 nix.conf "$pkgdir/etc/nix/nix.conf"
 }
