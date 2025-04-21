@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-virtualization
 	chicken-settings-nix
 )
-pkgver=2.23.0
+pkgver=2.24.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -160,7 +160,6 @@ package_chicken-settings-pkgs(){
 	    vim
 	    wget
 	    wl-clipboard
-	    zathura
 	)
 
     # packages management
