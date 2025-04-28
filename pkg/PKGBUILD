@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-virtualization
 	chicken-settings-nix
 )
-pkgver=2.28.1
+pkgver=2.29.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -123,6 +123,8 @@ package_chicken-settings-pkgs(){
 	    duf
 	    findutils
 	    fsarchiver
+	    fuse2
+	    gcr
 	    glances
 	    inxi
 	    meld
@@ -173,6 +175,7 @@ package_chicken-settings-pkgs(){
 
     # filesystem tools
     depends+=(
+        7zip
 	    e2fsprogs
 	    efitools
 	    haveged
@@ -183,6 +186,7 @@ package_chicken-settings-pkgs(){
 	    unrar
 	    unzip
 	    xz
+        zip
     )
 
     # power management
