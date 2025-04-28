@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-virtualization
 	chicken-settings-nix
 )
-pkgver=2.27.0
+pkgver=2.28.1
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -367,6 +367,9 @@ package_chicken-settings-virtualization(){
 
     depends=(
 	    incus
+	    virtualbox
+	    virtualbox-host-dkms
+	    virtualbox-guest-iso
     )
 }
 
