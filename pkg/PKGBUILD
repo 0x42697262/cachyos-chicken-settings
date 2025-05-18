@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-virtualization
 	chicken-settings-nix
 )
-pkgver=2.31.0
+pkgver=2.31.1
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages"
 arch=('x86_64')
@@ -36,7 +36,7 @@ sha256sums=(
         c4ea5d9214cc85b1796c9881c8001bd840de057dc909c3bc90807576a21cf688
         ce1ac648592c5c67e5d42079b85d3f065737da16e3613a37116bdae00411499f
         998b99f40b5ad59bfe6ddd4575c40b598ab60b70547d396fcb47f885644bf313
-        6429c51073ed8726466a507cd3af5c5fe57dc22002b39646e60ab6840c768a4a
+        b52522fd37694dd7a3c5fac0df929c53a48cc7e5883f9d2a3e428b77db4c6150
 )
 makedepends=(
         archlinux-keyring
@@ -293,7 +293,7 @@ package_chicken-settings-audio(){
 	    alsa-firmware
 	    alsa-plugins
 	    alsa-utils
-	    easyeffects
+	    # easyeffects
 	    pavucontrol
 	    pipewire-alsa
 	    pipewire-pulse
