@@ -1,0 +1,25 @@
+_configure_mkinitcpio(){
+    sed -i 's/^HOOKS=(.*)/HOOKS=(base udev autodetect microcode kms modconf block keyboard keymap consolefont plymouth encrypt lvm2 filesystems fsck)/' /etc/mkinitcpio.conf
+
+}
+
+post_upgrade(){
+    _configure_mkinitcpio
+}
+
+post_install(){
+    mkinitcpio -P
+
+
+    if ! grep -q "^en_US.UTF-8 UTF-8" /etc/locale.gen; then
+        bash -c 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen'
+    fi
+    if ! grep -q "^ja_JP.UTF-8 UTF-8" /etc/locale.gen; then
+        bash -c 'echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen'
+    fi
+    locale-gen
+
+
+    ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localetime
+    hwclock --systohc
+}

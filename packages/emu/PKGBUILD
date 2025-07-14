@@ -1,0 +1,358 @@
+# Maintainer: 0x42697262
+
+pkgbase=chicken-settings-emu
+pkgname=(
+	chicken-settings-emu-system
+	chicken-settings-emu-pkgs
+	chicken-settings-emu-audio
+	chicken-settings-emu-fonts
+	chicken-settings-emu-desktop-hyprland
+	chicken-settings-emu-virtualization
+	chicken-settings-emu-nix
+	chicken-settings-emu-calamares-base-install
+)
+pkgver=1.1.1
+pkgrel=0
+pkgdesc="0x42697262's CachyOS system configurations and packages for emu host"
+arch=('x86_64')
+url=""
+conflicts=(
+    chicken-settings
+)
+source=(
+    locale.conf
+    nix.conf
+)
+sha256sums=(
+    c6710d49351ac3b4c921ddb46f84d58e03ad59fd363374bd8ab6f6e3d1aaf1f7
+    64d2fec9cea65b92141e361fde528db85953f3dd332e2fb14312b1e87f6dbe70
+)
+license=('none')
+
+
+
+package_chicken-settings-emu-system(){
+    pkgdesc='System packages'
+    depends=(
+        util-linux
+    )
+
+    install=chicken-settings-emu-system.install
+
+    install -Dm0644 locale.conf "$pkgdir/etc/locale.conf"
+}
+
+
+package_chicken-settings-emu-pkgs(){
+    pkgdesc='chicken-settings packages and tools'
+
+    depends=(
+        appstream
+        findutils
+        fuse2
+        gcr
+        inxi
+        sed
+        udiskie
+    )
+
+
+    # Applications
+    depends+=(
+        mpv
+        obs-studio
+    )
+
+    # terminal apps and tools
+    depends+=(
+        gopass
+        kitty
+        lazygit
+        lsd
+        ncdu
+        neovim
+        netcat
+        nmap
+    )
+
+    # filesystem tools
+    depends+=(
+        7zip
+	xz
+        zip
+    )
+
+    # desktop integration
+    depends+=(
+	mlocate
+        wl-clipboard
+    )
+
+    optdepends=(
+      'wl-clipboard-rs: clipboard support (Rust version)'
+    )
+}
+
+
+package_chicken-settings-emu-desktop-hyprland(){
+    pkgdesc='Hyprland Desktop'
+
+    depends=(
+	    bemenu
+	    bemenu-wayland
+	    brightnessctl
+	    cachyos-hello
+	    cachyos-hyprland-settings
+	    cachyos-nord-gtk-theme-git
+	    cachyos-wallpapers
+	    capitaine-cursors
+	    grimblast-git
+	    hyprland
+	    kvantum
+	    kvantum-theme-nordic-git
+	    mako
+	    pamixer
+	    polkit-kde-agent
+	    qt5ct
+	    rofi
+	    rofi-emoji
+	    slurp
+	    swappy
+	    swaybg
+	    swaylock-effects-git
+	    swaylock-fancy-git
+	    waybar
+	    wlogout
+	    wob
+	    wofi
+	    xdg-desktop-portal-hyprland
+	    xorg-xwayland
+    )
+}
+
+package_chicken-settings-emu-audio(){
+    pkgdesk='Audio handling tools apps and libs'
+
+    depends=(
+	    easyeffects
+    )
+}
+
+package_chicken-settings-emu-fonts(){
+    pkgdesc='Fonts configuration'
+
+    # ttf
+    depends=(
+        ttf-bitstream-vera
+	ttf-dejavu
+	ttf-liberation
+	ttf-meslo-nerd
+	ttf-opensans
+    )
+
+    # others
+    depends+=(
+        freetype2
+	cantarell-fonts
+	opendesktop-fonts
+    )
+    optdepends=(
+      'ttf-vista-fonts: Microsoft Vista fonts'
+    )
+}
+
+
+package_chicken-settings-emu-virtualization(){
+    pkgdesc='Virtual machines and containers configuration'
+    install=chicken-settings-emu-virtualization.install
+
+    depends=(
+        incus
+        virtualbox
+        virtualbox-host-dkms
+        virtualbox-guest-iso
+    )
+}
+
+package_chicken-settings-emu-nix(){
+    pkgdesc='Nix configuration'
+    install=chicken-settings-emu-nix.install
+
+    install -Dm0755 nix.conf "$pkgdir/etc/nix/nix.conf"
+}
+
+
+# We're not supposed to move the packages outside here so that we can keep track of calamares changes.
+# Feel free to remove the packages not needed.
+package_chicken-settings-emu-calamares-base-install(){
+    pkgdesc='CachyOS Calamares Base Packages'
+
+    depends=(
+        accountsservice
+        adobe-source-han-sans-cn-fonts
+        adobe-source-han-sans-jp-fonts
+        adobe-source-han-sans-kr-fonts
+        alsa-firmware
+        alsa-plugins
+        alsa-utils
+        amd-ucode
+        awesome-terminal-fonts
+        base
+        base-devel
+        bash-completion
+        bind
+        bluez
+        bluez-hid2hci
+        bluez-libs
+        bluez-utils
+        btop
+        btrfs-progs
+        cachyos-fish-config
+        cachyos-hello
+        cachyos-hooks
+        cachyos-kernel-manager
+        cachyos-keyring
+        cachyos-mirrorlist
+        cachyos-packageinstaller
+        cachyos-plymouth-bootanimation
+        cachyos-rate-mirrors
+        cachyos-settings
+        cachyos-v3-mirrorlist
+        cachyos-v4-mirrorlist
+        cachyos-wallpapers
+        cachyos-zsh-config
+        chwd
+        cpupower
+        cryptsetup
+        device-mapper
+        diffutils
+        dmidecode
+        dmraid
+        dnsmasq
+        dosfstools
+        duf
+        e2fsprogs
+        efibootmgr
+        efitools
+        ethtool
+        exfatprogs
+        f2fs-tools
+        fastfetch
+        ffmpegthumbnailer
+        firefox
+        fsarchiver
+        git
+        glances
+        gst-libav
+        gst-plugin-pipewire
+        gst-plugin-va
+        gst-plugins-bad
+        gst-plugins-ugly
+        haveged
+        hdparm
+        hwdetect
+        hwinfo
+        inetutils
+        iptables-nft
+        iwd
+        jfsutils
+        less
+        lib32-mesa
+        lib32-opencl-mesa
+        lib32-vulkan-radeon
+        libdvdcss
+        libgsf
+        libopenraw
+        libwnck3
+        linux-cachyos
+        linux-cachyos-headers
+        linux-firmware
+        logrotate
+        lsb-release
+        lsscsi
+        lvm2
+        man-db
+        man-pages
+        mdadm
+        meld
+        mesa
+        mesa-utils
+        mkinitcpio
+        modemmanager
+        mtools
+        netctl
+        networkmanager
+        networkmanager-openvpn
+        nfs-utils
+        nilfs-utils
+        noto-color-emoji-fontconfig
+        noto-fonts
+        noto-fonts-cjk
+        noto-fonts-emoji
+        nss-mdns
+        ntp
+        octopi
+        opencl-mesa
+        opendesktop-fonts
+        openssh
+        pacman-contrib
+        paru
+        pavucontrol
+        perl
+        pipewire-alsa
+        pipewire-pulse
+        pkgfile
+        plocate
+        plymouth
+        poppler-glib
+        power-profiles-daemon
+        pv
+        python
+        python-defusedxml
+        python-packaging
+        rebuild-detector
+        reflector
+        ripgrep
+        rsync
+        rtkit
+        s-nail
+        sg3_utils
+        smartmontools
+        sof-firmware
+        sudo
+        sysfsutils
+        systemd-boot-manager
+        texinfo
+        ttf-bitstream-vera
+        ttf-dejavu
+        ttf-liberation
+        ttf-meslo-nerd
+        ttf-opensans
+        ufw
+        unrar
+        unzip
+        upower
+        usb_modeswitch
+        usbutils
+        vi
+        vim
+        vulkan-radeon
+        wget
+        which
+        wireless-regdb
+        wireplumber
+        wpa_supplicant
+        xdg-user-dirs
+        xdg-utils
+        xf86-input-libinput
+        xf86-video-amdgpu
+        xfsprogs
+        xl2tpd
+        xorg-server
+        xorg-xdpyinfo
+        xorg-xinit
+        xorg-xinput
+        xorg-xkill
+        xorg-xrandr
+    )
+}
