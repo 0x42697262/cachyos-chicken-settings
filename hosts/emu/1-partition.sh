@@ -18,9 +18,9 @@ fi
 echo "CachyOS Device: $CACHYOS_DEVICE"
 
 sudo parted $CACHYOS_DEVICE -- mklabel gpt
-sudo parted $CACHYOS_DEVICE -- mkpart ESP fat32 1MiB 513MiB
+sudo parted $CACHYOS_DEVICE -- mkpart ESP fat32 1MiB 2049MiB
 sudo parted $CACHYOS_DEVICE -- set 1 esp on
-sudo parted $CACHYOS_DEVICE -- mkpart CachyOS ext4 513MiB 100%
+sudo parted $CACHYOS_DEVICE -- mkpart CachyOS ext4 2049MiB 100%
 
 sleep 2
 BOOT_PARTITION=$(lsblk -no PATH,PARTLABEL "$CACHYOS_DEVICE" | grep 'ESP' | awk '{print $1}')
@@ -46,11 +46,10 @@ sudo pvcreate $CRYPTROOT
 echo "[+] Creating Volume Group on ${CRYPTROOT}"
 sudo vgcreate vg0 $CRYPTROOT
 echo "[+] Creating logical volumes"
-sudo lvcreate -L 128G -n root vg0
-sudo lvcreate -L 512G -n home vg0
+sudo lvcreate -L $HOME_PARTITION_SIZE -n root vg0
+sudo lvcreate -L $ROOT_PARTITION_SIZE -n home vg0
 sudo lvcreate -l 100%FREE -n isekai vg0
 
-sudo mkfs.ext4 /dev/vg0/root
-sudo mkfs.ext4 /dev/vg0/home
-sudo mkfs.ext4 /dev/vg0/isekai
-
+sudo mkfs.xfs /dev/vg0/root
+sudo mkfs.xfs /dev/vg0/home
+sudo mkfs.xfs /dev/vg0/isekai
