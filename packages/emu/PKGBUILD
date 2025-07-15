@@ -1,24 +1,21 @@
 # Maintainer: 0x42697262
 
-pkgbase=chicken-settings-emu
+pkgbase=chicken-settings
 pkgname=(
-	chicken-settings-emu-system
-	chicken-settings-emu-pkgs
-	chicken-settings-emu-audio
-	chicken-settings-emu-fonts
-	chicken-settings-emu-desktop-hyprland
-	chicken-settings-emu-virtualization
-	chicken-settings-emu-nix
-	chicken-settings-emu-calamares-base-install
+	chicken-settings-system
+	chicken-settings-pkgs
+	chicken-settings-audio
+	chicken-settings-fonts
+	chicken-settings-desktop-hyprland
+	chicken-settings-virtualization
+	chicken-settings-nix
+	chicken-settings-calamares-base-install
 )
-pkgver=1.1.1
+pkgver=1.2.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages for emu host"
 arch=('x86_64')
 url=""
-conflicts=(
-    chicken-settings
-)
 source=(
     locale.conf
     nix.conf
@@ -31,19 +28,19 @@ license=('none')
 
 
 
-package_chicken-settings-emu-system(){
+package_chicken-settings-system(){
     pkgdesc='System packages'
     depends=(
         util-linux
     )
 
-    install=chicken-settings-emu-system.install
+    install=chicken-settings-system.install
 
     install -Dm0644 locale.conf "$pkgdir/etc/locale.conf"
 }
 
 
-package_chicken-settings-emu-pkgs(){
+package_chicken-settings-pkgs(){
     pkgdesc='chicken-settings packages and tools'
 
     depends=(
@@ -94,7 +91,7 @@ package_chicken-settings-emu-pkgs(){
 }
 
 
-package_chicken-settings-emu-desktop-hyprland(){
+package_chicken-settings-desktop-hyprland(){
     pkgdesc='Hyprland Desktop'
 
     depends=(
@@ -130,7 +127,7 @@ package_chicken-settings-emu-desktop-hyprland(){
     )
 }
 
-package_chicken-settings-emu-audio(){
+package_chicken-settings-audio(){
     pkgdesk='Audio handling tools apps and libs'
 
     depends=(
@@ -138,7 +135,7 @@ package_chicken-settings-emu-audio(){
     )
 }
 
-package_chicken-settings-emu-fonts(){
+package_chicken-settings-fonts(){
     pkgdesc='Fonts configuration'
 
     # ttf
@@ -162,9 +159,9 @@ package_chicken-settings-emu-fonts(){
 }
 
 
-package_chicken-settings-emu-virtualization(){
+package_chicken-settings-virtualization(){
     pkgdesc='Virtual machines and containers configuration'
-    install=chicken-settings-emu-virtualization.install
+    install=chicken-settings-virtualization.install
 
     depends=(
         incus
@@ -174,9 +171,9 @@ package_chicken-settings-emu-virtualization(){
     )
 }
 
-package_chicken-settings-emu-nix(){
+package_chicken-settings-nix(){
     pkgdesc='Nix configuration'
-    install=chicken-settings-emu-nix.install
+    install=chicken-settings-nix.install
 
     install -Dm0755 nix.conf "$pkgdir/etc/nix/nix.conf"
 }
@@ -184,7 +181,7 @@ package_chicken-settings-emu-nix(){
 
 # We're not supposed to move the packages outside here so that we can keep track of calamares changes.
 # Feel free to remove the packages not needed.
-package_chicken-settings-emu-calamares-base-install(){
+package_chicken-settings-calamares-base-install(){
     pkgdesc='CachyOS Calamares Base Packages'
 
     depends=(
