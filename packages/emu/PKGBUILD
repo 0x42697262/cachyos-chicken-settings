@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-remote-desktop
 	chicken-settings-calamares-base-install
 )
-pkgver=1.5.0
+pkgver=1.6.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages for emu host"
 arch=('x86_64')
@@ -32,6 +32,7 @@ license=('none')
 package_chicken-settings-system(){
     pkgdesc='System packages'
     depends=(
+        rclone
         util-linux
     )
 
