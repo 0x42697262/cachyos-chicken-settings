@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-remote-desktop
 	chicken-settings-calamares-base-install
 )
-pkgver=1.6.0
+pkgver=1.7.0
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages for emu host"
 arch=('x86_64')
@@ -58,6 +58,7 @@ package_chicken-settings-pkgs(){
 
     # Applications
     depends+=(
+        fcitx5
         mpv
         obs-studio
     )
