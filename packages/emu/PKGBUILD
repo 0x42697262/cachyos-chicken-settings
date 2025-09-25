@@ -12,7 +12,7 @@ pkgname=(
 	chicken-settings-remote-desktop
 	chicken-settings-calamares-base-install
 )
-pkgver=1.15.0
+pkgver=1.15.1
 pkgrel=0
 pkgdesc="0x42697262's CachyOS system configurations and packages for emu host"
 arch=('x86_64')
@@ -193,7 +193,6 @@ package_chicken-settings-virtualization(){
         swtpm                   # TPM (Trusted Platform Module) emulator for VMs
         virt-install            # CLI tool to create guest VMs
         virt-manager            # GUI tool to create and manage guest VMs
-        xf86-input-vmmouse      # X.org VMWare Mouse input driver
         # dnsmasq               # already preinstalled by calamares base install
         # tuned                 # system tuning service for linux allows us to optimise the hypervisor for speed
     )  # Reference: https://gist.github.com/tatumroaquin/c6464e1ccaef40fd098a4f31db61ab22
