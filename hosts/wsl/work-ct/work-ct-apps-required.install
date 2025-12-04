@@ -1,0 +1,8 @@
+
+post_upgrade(){
+    fisher install jorgebucaran/nvm.fish
+}
+
+post_install(){
+    fisher install jorgebucaran/nvm.fish
+}

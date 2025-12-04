@@ -1,0 +1,12 @@
+_change_shell(){
+    chsh -s /bin/fish chicken
+}
+
+
+post_upgrade(){
+    _change_shell
+}
+
+post_install(){
+    _change_shell
+}

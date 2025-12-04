@@ -1,0 +1,56 @@
+pkgbase=work-ct-apps
+pkgname=(
+    work-ct-apps-required
+    work-ct-apps-development
+    work-ct-apps-tools
+)
+pkgver=0.0.10
+pkgrel=0
+pkgdesc="Work Arch Linux WSL packages"
+arch=('x86_64')
+url=""
+source=(
+
+)
+sha256sums=(
+)
+license=('none')
+
+package_work-ct-apps-required(){
+    pkgdesc='Core packages required for development'
+    depends=(
+	base
+	base-devel
+        git
+	github-cli
+	go
+	nodejs
+	nvm
+	pnpm
+	openssh
+    )
+
+    install=work-ct-apps-required.install
+}
+
+package_work-ct-apps-development(){
+    pkgdesc='Personal preferences for dev environment'
+    depends=(
+	fish
+	fisher
+	lazygit
+	neovim
+	ripgrep
+	tmux
+    )
+
+    install=work-ct-apps-development.install
+}
+
+
+package_work-ct-apps-tools(){
+    pkgdesc='Tools'
+    depends=(
+        7zip
+    )
+}
