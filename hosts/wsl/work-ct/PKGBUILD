@@ -4,7 +4,7 @@ pkgname=(
     work-ct-apps-development
     work-ct-apps-tools
 )
-pkgver=0.0.10
+pkgver=0.0.12
 pkgrel=0
 pkgdesc="Work Arch Linux WSL packages"
 arch=('x86_64')
@@ -25,6 +25,7 @@ package_work-ct-apps-required(){
 	github-cli
 	go
 	nodejs
+	npm
 	nvm
 	pnpm
 	openssh
