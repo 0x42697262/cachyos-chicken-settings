@@ -4,7 +4,7 @@ pkgname=(
     work-ct-apps-development
     work-ct-apps-tools
 )
-pkgver=0.0.13
+pkgver=0.0.14
 pkgrel=0
 pkgdesc="Work Arch Linux WSL packages"
 arch=('x86_64')
@@ -19,17 +19,16 @@ license=('none')
 package_work-ct-apps-required(){
     pkgdesc='Core packages required for development'
     depends=(
-	base
-	base-devel
-	cloudflared
-    git
-	github-cli
-	go
-	nodejs
-	npm
-	nvm
-	pnpm
-	openssh
+	    base
+	    base-devel
+        git
+	    github-cli
+	    go
+	    nodejs
+	    npm
+	    nvm
+	    pnpm
+	    openssh
     )
 
     install=work-ct-apps-required.install
@@ -38,12 +37,12 @@ package_work-ct-apps-required(){
 package_work-ct-apps-development(){
     pkgdesc='Personal preferences for dev environment'
     depends=(
-	fish
-	fisher
-	lazygit
-	neovim
-	ripgrep
-	tmux
+        fish
+	    fisher
+	    lazygit
+	    neovim
+	    ripgrep
+	    tmux
     )
 
     install=work-ct-apps-development.install
@@ -54,5 +53,6 @@ package_work-ct-apps-tools(){
     pkgdesc='Tools'
     depends=(
         7zip
+	    cloudflared
     )
 }
